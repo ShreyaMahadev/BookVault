@@ -16,61 +16,74 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="md:flex">
+    <div className="max-w-5xl mx-auto glass rounded-3xl shadow-2xl overflow-hidden float">
+      <div className="lg:flex">
         {/* Book Cover */}
-        <div className="md:w-1/3 bg-gray-100 flex items-center justify-center p-8">
+        <div className="lg:w-2/5 bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center p-12">
           {book.imageUrl ? (
-            <img
-              src={book.imageUrl}
-              alt={`Cover of ${book.title}`}
-              className="max-w-full max-h-96 rounded-lg shadow-md object-cover"
-            />
+            <div className="relative group">
+              <img
+                src={book.imageUrl}
+                alt={`Cover of ${book.title}`}
+                className="max-w-full max-h-96 rounded-2xl shadow-2xl object-cover glow transform group-hover:scale-105 transition-all duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
           ) : (
-            <div className="bg-gray-200 rounded-lg p-12 text-center">
-              <ImageIcon className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 text-sm">No cover image</p>
+            <div className="glass-dark rounded-2xl p-16 text-center">
+              <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-4">
+                <ImageIcon className="h-16 w-16 text-white/60" />
+              </div>
+              <p className="text-white/60 text-lg font-medium">No cover image</p>
             </div>
           )}
         </div>
 
         {/* Book Information */}
-        <div className="md:w-2/3 p-8">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{book.title}</h1>
-            <div className="flex items-center text-gray-600 mb-4">
-              <User className="h-5 w-5 mr-2" />
-              <span className="text-lg">{book.author}</span>
+        <div className="lg:w-3/5 p-12">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-white mb-4 tracking-tight leading-tight">{book.title}</h1>
+            <div className="flex items-center text-white/80 mb-6">
+              <div className="p-2 bg-white/10 rounded-xl mr-3">
+                <User className="h-5 w-5" />
+              </div>
+              <span className="text-xl font-semibold">{book.author}</span>
             </div>
-            <div className="flex items-center text-gray-500">
-              <Calendar className="h-4 w-4 mr-2" />
-              <span className="text-sm">Added on {formatDate(book.createdAt)}</span>
+            <div className="flex items-center text-white/60">
+              <div className="p-1.5 bg-white/10 rounded-lg mr-3">
+                <Calendar className="h-4 w-4" />
+              </div>
+              <span className="text-sm font-medium">Added on {formatDate(book.createdAt)}</span>
             </div>
           </div>
 
           {/* Additional Information */}
-          <div className="border-t border-gray-200 pt-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Book Details</h2>
+          <div className="border-t border-white/20 pt-8">
+            <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">Book Details</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-lg p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="glass-dark rounded-2xl p-6">
                 <div className="flex items-center">
-                  <Book className="h-5 w-5 text-blue-600 mr-2" />
-                  <span className="font-medium text-gray-700">ID</span>
+                  <div className="p-2 bg-blue-500/20 rounded-xl mr-3">
+                    <Book className="h-5 w-5 text-blue-400" />
+                  </div>
+                  <span className="font-semibold text-white/90">Book ID</span>
                 </div>
-                <p className="mt-1 text-gray-900 font-mono text-sm">{book.id}</p>
+                <p className="mt-3 text-white/70 font-mono text-sm bg-white/10 rounded-lg px-3 py-2">{book.id}</p>
               </div>
               
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="glass-dark rounded-2xl p-6">
                 <div className="flex items-center">
-                  <ImageIcon className="h-5 w-5 text-green-600 mr-2" />
-                  <span className="font-medium text-gray-700">Cover Status</span>
+                  <div className="p-2 bg-green-500/20 rounded-xl mr-3">
+                    <ImageIcon className="h-5 w-5 text-green-400" />
+                  </div>
+                  <span className="font-semibold text-white/90">Cover Status</span>
                 </div>
-                <p className="mt-1">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                <p className="mt-3">
+                  <span className={`inline-flex px-4 py-2 text-sm font-semibold rounded-xl ${
                     book.imageUrl 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-green-500/20 text-green-300 border border-green-400/30' 
+                      : 'bg-gray-500/20 text-gray-300 border border-gray-400/30'
                   }`}>
                     {book.imageUrl ? 'Available' : 'Not Available'}
                   </span>
@@ -80,11 +93,11 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex space-x-4 mt-6">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          <div className="flex space-x-4 mt-8">
+            <button className="btn-primary px-8 py-3 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300">
               Edit Book
             </button>
-            <button className="border border-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="glass-dark text-white/80 px-8 py-3 rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20">
               Delete Book
             </button>
           </div>

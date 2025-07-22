@@ -50,30 +50,32 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen gradient-bg">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="glass sticky top-0 z-50 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               {currentView !== 'list' && (
                 <button
                   onClick={goBack}
-                  className="mr-4 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="mr-4 p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
               )}
               <div className="flex items-center space-x-3">
-                <BookIcon className="h-8 w-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-900">Book Manager</h1>
+                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                  <BookIcon className="h-8 w-8 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-white tracking-tight">BookVault</h1>
               </div>
             </div>
 
             {currentView === 'list' && (
               <button
                 onClick={() => setCurrentView('add')}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-white/20 text-white text-sm font-semibold rounded-xl hover:bg-white/30 backdrop-blur-sm transition-all duration-300 glow-hover"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Book
@@ -84,14 +86,14 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         {currentView === 'list' && (
           <div>
             <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
                 My Library ({books.length} books)
               </h2>
-              <p className="text-gray-600">
+              <p className="text-white/70 text-lg">
                 Manage your book collection with cover images and details.
               </p>
             </div>
