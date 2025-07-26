@@ -1,11 +1,5 @@
-
-
 # 📚 BookVault - Full Stack Book Management Application
 
-
-![Colorful Book Illustration](https://cdn-icons-png.flaticon.com/512/167/167755.png)
-
-## Overview
 BookVault is a modern full-stack application for managing your personal library. Easily add, edit, view, and delete books with cover images. All book data is stored in MongoDB Atlas, and cover images are securely uploaded to Cloudinary.
 
 ---
