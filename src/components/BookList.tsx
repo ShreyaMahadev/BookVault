@@ -24,7 +24,7 @@ export const BookList: React.FC<BookListProps> = ({ books, onBookSelect }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
       {books.map((book) => (
         <div
-          key={book.id}
+          key={book._id || book.id}
           className="glass rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer overflow-hidden group glow-hover transform hover:scale-105"
           onClick={() => onBookSelect(book)}
         >

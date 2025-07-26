@@ -118,7 +118,7 @@ export const BookForm: React.FC<BookFormProps> = ({
 
         const uploadResponse = await bookApi.uploadCover(formData.coverImage);
         imageUrl = uploadResponse.imageUrl;
-        
+
         clearInterval(progressInterval);
         setUploadProgress(100);
       }
@@ -130,7 +130,13 @@ export const BookForm: React.FC<BookFormProps> = ({
         imageUrl: imageUrl || undefined
       };
 
-      const result = await bookApi.createBook(bookData);
+      let result;
+      if (isEditing && initialData) {
+        const bookId = (initialData as any)._id || initialData.id;
+        result = await bookApi.updateBook(bookId, bookData);
+      } else {
+        result = await bookApi.createBook(bookData);
+      }
       onSubmit(result);
 
       // Reset form
@@ -139,7 +145,6 @@ export const BookForm: React.FC<BookFormProps> = ({
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      
     } catch (err: any) {
       setError(err.response?.data?.message || 'Upload failed. Please try again.');
     } finally {

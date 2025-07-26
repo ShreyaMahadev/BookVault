@@ -1,18 +1,26 @@
 import React from 'react';
-import { Book, User, Calendar, ImageIcon } from 'lucide-react';
+import { Book, User, Calendar, ImageIcon, Trash2 } from 'lucide-react';
 import { Book as BookType } from '../types/Book';
 
 interface BookDetailsProps {
   book: BookType;
+  onDelete?: (id: string) => void;
+  onEdit?: () => void;
 }
 
-export const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
+export const BookDetails: React.FC<BookDetailsProps> = ({ book, onDelete, onEdit }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      onDelete && onDelete(book._id || book.id);
+    }
   };
 
   return (
@@ -94,11 +102,17 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book }) => {
 
           {/* Action Buttons */}
           <div className="flex space-x-4 mt-8">
-            <button className="btn-primary px-8 py-3 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300">
+            <button
+              className="btn-primary px-8 py-3 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300"
+              onClick={onEdit}
+            >
               Edit Book
             </button>
-            <button className="glass-dark text-white/80 px-8 py-3 rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20">
-              Delete Book
+            <button
+              className="glass-dark text-white/80 px-8 py-3 rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20 flex items-center"
+              onClick={handleDelete}
+            >
+              <Trash2 className="h-5 w-5 mr-2" /> Delete Book
             </button>
           </div>
         </div>

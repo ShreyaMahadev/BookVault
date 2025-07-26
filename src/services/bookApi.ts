@@ -39,5 +39,10 @@ export const bookApi = {
   async getAllBooks(): Promise<Book[]> {
     const response = await axios.get<Book[]>(`${API_BASE_URL}/books`);
     return response.data;
+  },
+
+  async deleteBook(id: string): Promise<{ message: string }> {
+    const response = await axios.delete<{ message: string }>(`${API_BASE_URL}/books/${id}`);
+    return response.data;
   }
 };
