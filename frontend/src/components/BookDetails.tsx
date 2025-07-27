@@ -148,13 +148,6 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book, onDelete, onEdit
                 <Edit3 className="h-4 w-4" />
                 <span>Edit Book</span>
               </button>
-              <button
-                className="btn-secondary px-6 py-3 inline-flex items-center space-x-2 text-red-600 border-red-200 hover:bg-red-50"
-                onClick={handleDelete}
-              >
-                <Trash2 className="h-4 w-4" />
-                <span>Delete Book</span>
-              </button>
             </div>
           </div>
         </div>

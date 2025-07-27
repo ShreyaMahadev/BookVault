@@ -6,6 +6,7 @@ import { BookDetails } from './components/BookDetails';
 import { BookList } from './components/BookList';
 import { Book } from './types/Book';
 import { bookApi } from './services/bookApi';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function Navigation() {
   const location = useLocation();
@@ -102,7 +103,11 @@ function LibraryPage() {
     setIsLoading(true);
     setError('');
     bookApi.getAllBooks()
-      .then(data => setBooks(data))
+      .then(data => {
+        // Sort by createdAt descending (recent first)
+        const sorted = [...data].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setBooks(sorted);
+      })
       .catch(() => setError('Failed to load books.'))
       .finally(() => setIsLoading(false));
   }, []);
@@ -115,7 +120,7 @@ function LibraryPage() {
     <div className="section-spacing">
       <div className="container-main">
         <div className="text-center mb-16 fade-in">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">My Library</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Library</h1>
           <p className="text-xl text-muted">
             {books.length} {books.length === 1 ? 'book' : 'books'} in your collection
           </p>
@@ -148,18 +153,45 @@ function LibraryPage() {
 }
 
 function App() {
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-
   const handleBookSubmit = (newBook: Book) => {
     // Handle book submission
     console.log('Book submitted:', newBook);
   };
 
+  // Book details page with fetch by ID
+  function BookDetailsPage() {
+    const { id } = useParams();
+    const [book, setBook] = useState<Book | null>(null);
+    useEffect(() => {
+      if (id) {
+        bookApi.getBook(id).then(setBook);
+      }
+    }, [id]);
+    const navigate = useNavigate();
+    const handleEdit = () => {
+      navigate(`/edit/${id}`);
+    };
+    if (!book) return <div>Loading...</div>;
+    return <BookDetails book={book} onEdit={handleEdit} />;
+  }
+
+  // Book edit page with fetch by ID
+  function BookEditPage() {
+    const { id } = useParams();
+    const [book, setBook] = useState<Book | null>(null);
+    useEffect(() => {
+      if (id) {
+        bookApi.getBook(id).then(setBook);
+      }
+    }, [id]);
+    if (!book) return <div>Loading...</div>;
+    return <BookForm onSubmit={handleBookSubmit} isEditing={true} initialData={book} />;
+  }
+
   return (
     <Router>
       <div className="min-h-screen bg-white">
         <Navigation />
-        
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -171,24 +203,8 @@ function App() {
                 </div>
               </div>
             } />
-            <Route path="/details/:id" element={
-              <div className="section-spacing">
-                <div className="container-main">
-                  <BookDetails book={selectedBook || {}} />
-                </div>
-              </div>
-            } />
-            <Route path="/edit/:id" element={
-              <div className="section-spacing">
-                <div className="container-main">
-                  <BookForm 
-                    onSubmit={handleBookSubmit} 
-                    isEditing={true} 
-                    initialData={selectedBook || {}} 
-                  />
-                </div>
-              </div>
-            } />
+            <Route path="/details/:id" element={<BookDetailsPage />} />
+            <Route path="/edit/:id" element={<BookEditPage />} />
           </Routes>
         </main>
       </div>

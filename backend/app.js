@@ -24,19 +24,6 @@ cloudinary.config({
 
 connectDB();
 
-const upload = multer({
-  dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-      cb(null, true);
-    } else {
-      cb(new Error('Only JPG and PNG images are allowed'));
-    }
-  },
-});
-
-
 app.use('/api/books', bookRoutes);
 
 const PORT = process.env.PORT || 5000;

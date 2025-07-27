@@ -1,7 +1,34 @@
 import express from 'express';
+import multer from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+dotenv.config();
 import Book from '../models/Book.js';
 
 const router = express.Router();
+
+// Multer setup for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Upload book cover image
+router.post('/upload-cover', upload.single('cover'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    // Upload to Cloudinary
+    const uploadStream = cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      res.json({ imageUrl: result.secure_url });
+    });
+    uploadStream.end(req.file.buffer);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Get all books
 router.get('/', async (req, res) => {

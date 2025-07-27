@@ -15,6 +15,16 @@ const books = [
     author: 'Jane Austen',
     coverUrl: 'https://res.cloudinary.com/demo/image/upload/v1690000000/pride-and-prejudice.jpg',
   },
+  {
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitzgerald',
+    coverUrl: 'https://res.cloudinary.com/demo/image/upload/v1690000000/the-great-gatsby.jpg',
+  },
+  {
+    title: '1984',
+    author: 'George Orwell',
+    coverUrl: 'https://res.cloudinary.com/demo/image/upload/v1690000000/1984.jpg',
+  },
 ];
 
 async function seedBooks() {

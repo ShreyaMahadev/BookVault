@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, CheckCircle, AlertCircle, Loader2, ImageIcon } from 'lucide-react';
 import { bookApi } from '../services/bookApi';
+import { useNavigate } from 'react-router-dom';
 import { BookFormData } from '../types/Book';
 
 interface BookFormProps {
@@ -24,6 +25,9 @@ export const BookForm: React.FC<BookFormProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState<string>('');
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const navigate = useNavigate();
   const [dragActive, setDragActive] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -98,8 +102,8 @@ export const BookForm: React.FC<BookFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title.trim() || !formData.author.trim()) {
-      setError('Please fill in all required fields');
+    if (!formData.title.trim() || !formData.author.trim() || !formData.coverImage) {
+      setError('Please fill in all required fields, including a cover image');
       return;
     }
 
@@ -109,42 +113,43 @@ export const BookForm: React.FC<BookFormProps> = ({
 
     try {
       let imageUrl = '';
-      
       if (formData.coverImage) {
         // Simulate upload progress
         const progressInterval = setInterval(() => {
           setUploadProgress(prev => Math.min(prev + 10, 90));
         }, 100);
-
         const uploadResponse = await bookApi.uploadCover(formData.coverImage);
         imageUrl = uploadResponse.imageUrl;
-
         clearInterval(progressInterval);
         setUploadProgress(100);
       }
-
       // Create or update book
       const bookData = {
         title: formData.title,
         author: formData.author,
         imageUrl: imageUrl || undefined
       };
-
       let result;
       if (isEditing && initialData) {
-        const bookId = (initialData as any)._id || initialData.id;
+        const bookId = (initialData as any)._id;
         result = await bookApi.updateBook(bookId, bookData);
+        setModalMessage('Successfully updated book!');
       } else {
         result = await bookApi.createBook(bookData);
+        setModalMessage('Successfully added book!');
       }
       onSubmit(result);
-
       // Reset form
-      setFormData({ title: '', author: '' });
+      setFormData({ title: '', author: '', coverImage: undefined });
       setPreviewUrl('');
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        navigate('/library');
+      }, 1200);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Upload failed. Please try again.');
     } finally {
@@ -156,6 +161,21 @@ export const BookForm: React.FC<BookFormProps> = ({
   return (
     <div className="max-w-2xl mx-auto fade-in">
       <div className="text-center mb-12">
+      {/* Success Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-sm mx-auto">
+            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">{modalMessage}</h2>
+            <button
+              className="btn-primary px-6 py-3 mt-6"
+              onClick={() => setShowModal(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
         <div className="inline-flex p-4 bg-gray-100 rounded-2xl mb-6">
           <Upload className="h-12 w-12 text-gray-700" />
         </div>
