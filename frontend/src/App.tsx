@@ -1,15 +1,100 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import { Plus, Book as BookIcon, Home } from 'lucide-react';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Plus, Book as BookIcon, Home, Library } from 'lucide-react';
 import { BookForm } from './components/BookForm';
 import { BookDetails } from './components/BookDetails';
 import { BookList } from './components/BookList';
 import { Book } from './types/Book';
 import { bookApi } from './services/bookApi';
 
-function App() {
+function Navigation() {
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  return (
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <div className="container-main">
+        <div className="flex justify-between items-center h-16">
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="p-2 bg-gray-900 rounded-xl">
+              <BookIcon className="h-6 w-6 text-white" />
+            </div>
+            <h1 className="text-xl font-bold text-gray-900">BookVault</h1>
+          </Link>
+          
+          <nav className="flex items-center space-x-2">
+            <Link 
+              to="/" 
+              className={`nav-link px-4 py-2 flex items-center space-x-2 ${isActive('/') ? 'active' : ''}`}
+            >
+              <Home className="h-4 w-4" />
+              <span>Home</span>
+            </Link>
+            <Link 
+              to="/library" 
+              className={`nav-link px-4 py-2 flex items-center space-x-2 ${isActive('/library') ? 'active' : ''}`}
+            >
+              <Library className="h-4 w-4" />
+              <span>Library</span>
+            </Link>
+            <Link 
+              to="/add" 
+              className={`nav-link px-4 py-2 flex items-center space-x-2 ${isActive('/add') ? 'active' : ''}`}
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add Book</span>
+            </Link>
+          </nav>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function HomePage() {
+  return (
+    <div className="section-spacing">
+      <div className="container-main">
+        <div className="text-center max-w-4xl mx-auto fade-in">
+          <div className="inline-flex p-4 bg-gray-100 rounded-2xl mb-8">
+            <BookIcon className="h-16 w-16 text-gray-700" />
+          </div>
+          <h1 className="text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            Your Personal
+            <br />
+            <span className="text-gray-600">Book Collection</span>
+          </h1>
+          <p className="text-xl text-muted mb-12 leading-relaxed max-w-2xl mx-auto">
+            Organize, manage, and showcase your book library with beautiful cover images 
+            and detailed information. Built with modern technology for book lovers.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link 
+              to="/library" 
+              className="btn-primary px-8 py-4 text-lg font-medium inline-flex items-center space-x-2"
+            >
+              <Library className="h-5 w-5" />
+              <span>Browse Library</span>
+            </Link>
+            <Link 
+              to="/add" 
+              className="btn-secondary px-8 py-4 text-lg font-medium inline-flex items-center space-x-2"
+            >
+              <Plus className="h-5 w-5" />
+              <span>Add Book</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LibraryPage() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
@@ -22,91 +107,93 @@ function App() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const handleBookSelect = (book: Book) => {
+    window.location.href = `/details/${book._id || book.id}`;
+  };
+
+  return (
+    <div className="section-spacing">
+      <div className="container-main">
+        <div className="text-center mb-16 fade-in">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">My Library</h1>
+          <p className="text-xl text-muted">
+            {books.length} {books.length === 1 ? 'book' : 'books'} in your collection
+          </p>
+        </div>
+
+        {isLoading ? (
+          <div className="text-center py-20">
+            <div className="inline-flex p-6 bg-gray-100 rounded-2xl mb-6">
+              <BookIcon className="h-12 w-12 text-gray-400 animate-pulse" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Loading your books...</h3>
+            <p className="text-muted">Please wait while we fetch your collection</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <div className="inline-flex p-6 bg-red-50 rounded-2xl mb-6">
+              <BookIcon className="h-12 w-12 text-red-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-red-600 mb-2">Error Loading Books</h3>
+            <p className="text-red-500">{error}</p>
+          </div>
+        ) : (
+          <div className="slide-up">
+            <BookList books={books} onBookSelect={handleBookSelect} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
   const handleBookSubmit = (newBook: Book) => {
-    setBooks(prev => [newBook, ...prev]);
+    // Handle book submission
+    console.log('Book submitted:', newBook);
   };
 
   return (
     <Router>
-      <div className="min-h-screen gradient-bg">
-        {/* Header & Navigation */}
-        <header className="glass sticky top-0 z-50 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                  <BookIcon className="h-8 w-8 text-white" />
-                </div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">BookVault</h1>
-              </div>
-              <nav className="flex space-x-4">
-                <a href="/" className="inline-flex items-center px-4 py-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300">
-                  <Home className="h-5 w-5 mr-2" /> Home
-                </a>
-                <a href="/library" className="inline-flex items-center px-4 py-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300">
-                  <BookIcon className="h-5 w-5 mr-2" /> Library
-                </a>
-                <a href="/add" className="inline-flex items-center px-4 py-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300">
-                  <Plus className="h-5 w-5 mr-2" /> Add Book
-                </a>
-              </nav>
-            </div>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <div className="min-h-screen bg-white">
+        <Navigation />
+        
+        <main>
           <Routes>
-            <Route path="/" element={
-              <div className="text-center py-24">
-                <div className="inline-flex p-8 glass rounded-3xl mb-8 float">
-                  <BookIcon className="h-24 w-24 text-white/70" />
-                </div>
-                <h2 className="text-4xl font-bold text-white mb-6 tracking-tight">Welcome to BookVault</h2>
-                <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
-                  Your personal book management application. Add, view, and organize your book collection with beautiful cover images and details. Powered by MongoDB Atlas and Cloudinary.
-                </p>
-                <div className="flex justify-center space-x-6">
-                  <a href="/library" className="btn-primary px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl transform hover:scale-105 transition-all duration-300">Go to Library</a>
-                  <a href="/add" className="glass-dark text-white/80 px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all duration-300 border border-white/20">Add a Book</a>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/library" element={<LibraryPage />} />
+            <Route path="/add" element={
+              <div className="section-spacing">
+                <div className="container-main">
+                  <BookForm onSubmit={handleBookSubmit} />
                 </div>
               </div>
             } />
-            <Route path="/library" element={
-              <div>
-                <div className="mb-8 text-center">
-                  <h2 className="text-3xl font-bold text-white mb-3 tracking-tight">My Library ({books.length} books)</h2>
-                  <p className="text-white/70 text-lg">Manage your book collection with cover images and details.</p>
+            <Route path="/details/:id" element={
+              <div className="section-spacing">
+                <div className="container-main">
+                  <BookDetails book={selectedBook || {}} />
                 </div>
-                {isLoading ? (
-                  <div className="text-center py-20">
-                    <div className="inline-flex p-6 glass rounded-3xl mb-6 float animate-spin">
-                      <BookIcon className="h-20 w-20 text-white/60" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-3 tracking-tight">Loading books...</h3>
-                  </div>
-                ) : error ? (
-                  <div className="text-center py-20">
-                    <div className="inline-flex p-6 glass rounded-3xl mb-6 float">
-                      <BookIcon className="h-20 w-20 text-red-400" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-red-400 mb-3 tracking-tight">{error}</h3>
-                  </div>
-                ) : (
-                  <BookList books={books} onBookSelect={book => window.location.href = `/details/${book._id || book.id}`} />
-                )}
               </div>
             } />
-            <Route path="/add" element={<BookForm onSubmit={handleBookSubmit} />} />
-            <Route path="/details/:id" element={<BookDetails book={selectedBook || {}} />} />
-            <Route path="/edit/:id" element={<BookForm onSubmit={handleBookSubmit} isEditing={true} initialData={selectedBook || {}} />} />
+            <Route path="/edit/:id" element={
+              <div className="section-spacing">
+                <div className="container-main">
+                  <BookForm 
+                    onSubmit={handleBookSubmit} 
+                    isEditing={true} 
+                    initialData={selectedBook || {}} 
+                  />
+                </div>
+              </div>
+            } />
           </Routes>
         </main>
       </div>
     </Router>
   );
 }
-
-
 
 export default App;

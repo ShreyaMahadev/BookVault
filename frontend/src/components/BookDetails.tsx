@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, User, Calendar, ImageIcon, Trash2 } from 'lucide-react';
+import { Book, User, Calendar, ImageIcon, Trash2, Edit3, ArrowLeft } from 'lucide-react';
 import { Book as BookType } from '../types/Book';
 
 interface BookDetailsProps {
@@ -25,107 +25,137 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book, onDelete, onEdit
     }
   };
 
-  return (
-    <div className="max-w-5xl mx-auto glass rounded-3xl shadow-2xl overflow-hidden float">
-      <div className="lg:flex">
-        {/* Book Cover */}
-        <div className="lg:w-2/5 bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center p-12">
-          {book.imageUrl ? (
-            <div className="relative group">
-              <img
-                src={book.imageUrl}
-                alt={`Cover of ${book.title}`}
-                className="max-w-full max-h-96 rounded-2xl shadow-2xl object-cover glow transform group-hover:scale-105 transition-all duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </div>
-          ) : (
-            <div className="glass-dark rounded-2xl p-16 text-center">
-              <div className="inline-flex p-4 bg-white/10 rounded-2xl mb-4">
-                <ImageIcon className="h-16 w-16 text-white/60" />
-              </div>
-              <p className="text-white/60 text-lg font-medium">No cover image</p>
-            </div>
-          )}
-        </div>
+  const handleBack = () => {
+    window.history.back();
+  };
 
-        {/* Book Information */}
-        <div className="lg:w-3/5 p-12">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-white mb-4 tracking-tight leading-tight">{book.title}</h1>
-            <div className="flex items-center text-white/80 mb-6">
-              <div className="p-2 bg-white/10 rounded-xl mr-3">
-                <User className="h-5 w-5" />
+  return (
+    <div className="max-w-6xl mx-auto fade-in">
+      {/* Back Button */}
+      <button
+        onClick={handleBack}
+        className="btn-secondary px-4 py-2 mb-8 inline-flex items-center space-x-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        <span>Back to Library</span>
+      </button>
+
+      <div className="card overflow-hidden">
+        <div className="lg:flex">
+          {/* Book Cover */}
+          <div className="lg:w-2/5 bg-gray-50 flex items-center justify-center p-12">
+            {book.imageUrl ? (
+              <div className="relative group">
+                <img
+                  src={book.imageUrl}
+                  alt={`Cover of ${book.title}`}
+                  className="max-w-full max-h-96 rounded-xl shadow-lg object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
-              <span className="text-xl font-semibold">{book.author}</span>
-            </div>
-            <div className="flex items-center text-white/60 mb-2">
-              <div className="p-1.5 bg-white/10 rounded-lg mr-3">
-                <Calendar className="h-4 w-4" />
-              </div>
-              <span className="text-sm font-medium">Added on {formatDate(book.createdAt)}</span>
-            </div>
-            <div className="flex flex-wrap gap-4 text-white/70 mb-2">
-              {book.genre && <span className="px-3 py-1 rounded-xl bg-blue-500/20 text-blue-300 text-xs font-semibold">Genre: {book.genre}</span>}
-              {book.publishedYear && <span className="px-3 py-1 rounded-xl bg-purple-500/20 text-purple-300 text-xs font-semibold">Year: {book.publishedYear}</span>}
-            </div>
-            {book.description && (
-              <div className="mt-4">
-                <h3 className="text-lg font-bold text-white mb-2">Summary</h3>
-                <p className="text-white/80 text-base bg-white/5 rounded-xl p-4">{book.description}</p>
+            ) : (
+              <div className="bg-gray-200 rounded-xl p-16 text-center">
+                <div className="inline-flex p-4 bg-gray-300 rounded-xl mb-4">
+                  <ImageIcon className="h-16 w-16 text-gray-500" />
+                </div>
+                <p className="text-gray-600 text-lg font-medium">No cover image</p>
               </div>
             )}
           </div>
 
-          {/* Additional Information */}
-          <div className="border-t border-white/20 pt-8">
-            <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">Book Details</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="glass-dark rounded-2xl p-6">
-                <div className="flex items-center">
-                  <div className="p-2 bg-blue-500/20 rounded-xl mr-3">
-                    <Book className="h-5 w-5 text-blue-400" />
-                  </div>
-                  <span className="font-semibold text-white/90">Book ID</span>
-                </div>
-                <p className="mt-3 text-white/70 font-mono text-sm bg-white/10 rounded-lg px-3 py-2">{book.id}</p>
-              </div>
+          {/* Book Information */}
+          <div className="lg:w-3/5 p-12">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">{book.title}</h1>
               
-              <div className="glass-dark rounded-2xl p-6">
-                <div className="flex items-center">
-                  <div className="p-2 bg-green-500/20 rounded-xl mr-3">
-                    <ImageIcon className="h-5 w-5 text-green-400" />
-                  </div>
-                  <span className="font-semibold text-white/90">Cover Status</span>
+              <div className="flex items-center text-muted mb-6">
+                <div className="p-2 bg-gray-100 rounded-xl mr-3">
+                  <User className="h-5 w-5" />
                 </div>
-                <p className="mt-3">
-                  <span className={`inline-flex px-4 py-2 text-sm font-semibold rounded-xl ${
+                <span className="text-xl font-semibold">{book.author}</span>
+              </div>
+
+              <div className="flex items-center text-subtle mb-6">
+                <div className="p-1.5 bg-gray-100 rounded-lg mr-3">
+                  <Calendar className="h-4 w-4" />
+                </div>
+                <span className="text-sm font-medium">Added on {formatDate(book.createdAt)}</span>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mb-6">
+                {book.genre && (
+                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-lg border border-blue-200">
+                    Genre: {book.genre}
+                  </span>
+                )}
+                {book.publishedYear && (
+                  <span className="px-3 py-1 bg-purple-50 text-purple-700 text-sm font-medium rounded-lg border border-purple-200">
+                    Year: {book.publishedYear}
+                  </span>
+                )}
+              </div>
+
+              {book.description && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold text-gray-900 mb-3">Description</h3>
+                  <div className="bg-gray-50 rounded-xl p-4">
+                    <p className="text-gray-700 leading-relaxed">{book.description}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Book Details */}
+            <div className="border-t border-gray-200 pt-8 mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Book Details</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="flex items-center mb-3">
+                    <div className="p-2 bg-blue-100 rounded-xl mr-3">
+                      <Book className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <span className="font-semibold text-gray-900">Book ID</span>
+                  </div>
+                  <p className="text-gray-600 font-mono text-sm bg-white rounded-lg px-3 py-2 border">
+                    {book.id || book._id}
+                  </p>
+                </div>
+                
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="flex items-center mb-3">
+                    <div className="p-2 bg-green-100 rounded-xl mr-3">
+                      <ImageIcon className="h-5 w-5 text-green-600" />
+                    </div>
+                    <span className="font-semibold text-gray-900">Cover Status</span>
+                  </div>
+                  <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-lg ${
                     book.imageUrl 
-                      ? 'bg-green-500/20 text-green-300 border border-green-400/30' 
-                      : 'bg-gray-500/20 text-gray-300 border border-gray-400/30'
+                      ? 'bg-green-100 text-green-700 border border-green-200' 
+                      : 'bg-gray-100 text-gray-700 border border-gray-200'
                   }`}>
                     {book.imageUrl ? 'Available' : 'Not Available'}
                   </span>
-                </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Action Buttons */}
-          <div className="flex space-x-4 mt-8">
-            <button
-              className="btn-primary px-8 py-3 rounded-2xl font-semibold transform hover:scale-105 transition-all duration-300"
-              onClick={onEdit}
-            >
-              Edit Book
-            </button>
-            <button
-              className="glass-dark text-white/80 px-8 py-3 rounded-2xl font-semibold hover:bg-white/10 transition-all duration-300 border border-white/20 flex items-center"
-              onClick={handleDelete}
-            >
-              <Trash2 className="h-5 w-5 mr-2" /> Delete Book
-            </button>
+            {/* Action Buttons */}
+            <div className="flex space-x-4">
+              <button
+                className="btn-primary px-6 py-3 inline-flex items-center space-x-2"
+                onClick={onEdit}
+              >
+                <Edit3 className="h-4 w-4" />
+                <span>Edit Book</span>
+              </button>
+              <button
+                className="btn-secondary px-6 py-3 inline-flex items-center space-x-2 text-red-600 border-red-200 hover:bg-red-50"
+                onClick={handleDelete}
+              >
+                <Trash2 className="h-4 w-4" />
+                <span>Delete Book</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
