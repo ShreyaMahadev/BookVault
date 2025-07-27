@@ -5,6 +5,9 @@ export interface Book {
   author: string;
   imageUrl?: string;
   createdAt: string;
+  genre?: string;
+  description?: string;
+  publishedYear?: number;
 }
 
 export interface BookFormData {

@@ -8,7 +8,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 import path from 'path';
 import { connectDB } from './db.js';
-import bookRoutes from './bookRoutes.js';
+import bookRoutes from './routes/books.js';
 
 dotenv.config();
 

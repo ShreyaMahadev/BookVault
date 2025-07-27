@@ -10,7 +10,9 @@ interface BookDetailsProps {
 
 export const BookDetails: React.FC<BookDetailsProps> = ({ book, onDelete, onEdit }) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Unknown';
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -57,12 +59,22 @@ export const BookDetails: React.FC<BookDetailsProps> = ({ book, onDelete, onEdit
               </div>
               <span className="text-xl font-semibold">{book.author}</span>
             </div>
-            <div className="flex items-center text-white/60">
+            <div className="flex items-center text-white/60 mb-2">
               <div className="p-1.5 bg-white/10 rounded-lg mr-3">
                 <Calendar className="h-4 w-4" />
               </div>
               <span className="text-sm font-medium">Added on {formatDate(book.createdAt)}</span>
             </div>
+            <div className="flex flex-wrap gap-4 text-white/70 mb-2">
+              {book.genre && <span className="px-3 py-1 rounded-xl bg-blue-500/20 text-blue-300 text-xs font-semibold">Genre: {book.genre}</span>}
+              {book.publishedYear && <span className="px-3 py-1 rounded-xl bg-purple-500/20 text-purple-300 text-xs font-semibold">Year: {book.publishedYear}</span>}
+            </div>
+            {book.description && (
+              <div className="mt-4">
+                <h3 className="text-lg font-bold text-white mb-2">Summary</h3>
+                <p className="text-white/80 text-base bg-white/5 rounded-xl p-4">{book.description}</p>
+              </div>
+            )}
           </div>
 
           {/* Additional Information */}

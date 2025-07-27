@@ -61,7 +61,7 @@ export const BookList: React.FC<BookListProps> = ({ books, onBookSelect }) => {
               <span className="text-sm font-medium">{book.author}</span>
             </div>
             <p className="text-xs text-white/50 font-medium">
-              {new Date(book.createdAt).toLocaleDateString()}
+              {isNaN(new Date(book.createdAt).getTime()) ? 'Unknown' : new Date(book.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
