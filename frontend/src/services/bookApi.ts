@@ -2,6 +2,8 @@ import axios from 'axios';
 import { Book, BookFormData, UploadResponse } from '../types/Book';
 
 const API_BASE_URL = "https://bookvault-6s4w.onrender.com/";
+axios.get(`${API_BASE_URL}/books`);
+
 
 export const bookApi = {
   async uploadCover(file: File): Promise<UploadResponse> {
