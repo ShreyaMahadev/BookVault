@@ -1,8 +1,7 @@
-# 📚 Full-Stack Book Management Application 📚
+# 📚 Full-Stack Book Management Application (BookVault) 📚
 
-A full-stack web app for your personal library! Add, view, edit, and browse books with beautiful cover images. Built with React 🧁 (frontend) and Node.js/Express/MongoDB 🍃 (backend). Book covers are uploaded and stored using Cloudinary ☁️.
-
----
+A full-stack web app for your personal library! Add, view, edit, and browse books with beautiful cover images. Built with React 🧁 (frontend) and Node.js/Express/MongoDB 🍃 (backend). Book covers are uploaded and stored using Cloudinary ☁️.  
+Check out the live project here : **[BookVault](https://bookvault-2.onrender.com/)**.
 
 ---
 
@@ -122,6 +121,9 @@ MIT
 
 ---
 
+## Credits
+
+Developed by ShreyaMahadev✨
 ## Credits
 
 Developed by ShreyaMahadev✨
