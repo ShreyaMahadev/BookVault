@@ -2,7 +2,7 @@
   "type": "module",
   "name": "book-management-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
  "scripts": {
   "start": "node app.js",
   "dev": "nodemon app.js"
