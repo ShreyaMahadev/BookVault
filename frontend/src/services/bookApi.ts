@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Book, BookFormData, UploadResponse } from '../types/Book';
 
-const API_BASE_URL = "https://bookvault-6s4w.onrender.com/";
-axios.get(`${API_BASE_URL}/books`);
+const API_BASE_URL = "https://bookvault-6s4w.onrender.com/api/books";
+axios.get(API_BASE_URL);
 
 
 export const bookApi = {
