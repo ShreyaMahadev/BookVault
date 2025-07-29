@@ -34,6 +34,7 @@ router.post('/upload-cover', upload.single('cover'), async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const books = await Book.find();
+    console.log('Retrieved books:', books);
     res.json(books);
   } catch (error) {
     res.status(500).json({ error: error.message });
