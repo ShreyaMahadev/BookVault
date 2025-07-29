@@ -2,7 +2,9 @@
 
 A full-stack web app for your personal library! Add, view, edit, and browse books with beautiful cover images. Built with React 🧁 (frontend) and Node.js/Express/MongoDB 🍃 (backend). Book covers are uploaded and stored using Cloudinary ☁️.  
 
-Check out the live project here : **[BookVault](https://bookvault-2.onrender.com/)**
+## Live Demo
+
+You can check out the live project here: **[BookVault](https://bookvault-2.onrender.com/)**
 
 ---
 
