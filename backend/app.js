@@ -25,6 +25,10 @@ cloudinary.config({
 connectDB();
 
 app.use('/api/books', bookRoutes);
+app.get('/', (req, res) => {
+  res.send('📚 Welcome to the BookVault API');
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
